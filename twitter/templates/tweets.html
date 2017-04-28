@@ -1,0 +1,97 @@
+<html>
+
+<head>
+	{% load static %}
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js">
+
+    </script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static "css.css" %}">
+</head>
+
+<body style="background-color:powderblue;">
+
+
+<nav id="nav">
+    <div class="nav-wrapper">
+      <a href="http://127.0.0.1:8000/" class="brand-logo">
+      	<img src="http://static.rappler.com/images/fake-twitter.jpg" width="114px">
+      	</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        {% if user|upper == 'ANONYMOUSUSER' %} 
+                <li><a href="/admin"><b>Log In</b></a></li>
+                {% else %}
+                <li><a href="/perfil"><i class="material-icons">perm_identity</i></a></li> 	
+                  <li>Usuario logueado: <b>{{user|upper}}</b></li>
+                  <li><a href="/admin/logout"> Salir</a></li>
+
+                {% endif %}
+      </ul>
+      <center><div class="container"><li>Cantidad de tweets: {{todos_los_tweets|length }}</li></div></center>	
+    </div>
+
+  </nav>
+
+	<div class="container"> 
+		<div class="z-depth-5 container" >
+		<div>
+			<b><p id="mensaje" class="center">¿Qué estás pensando?</p></b>
+			<div class="container">
+			<div class="row">
+				<div class="col s12">
+				<form action="{% url 'tweetear' %}" method="POST">
+				 {% csrf_token %}
+					<div class="row">       
+						<div class="input-field col s12">
+							&nbsp;&nbsp;&nbsp;
+							<textarea name="texto " class="materialize-textarea"  type="text" id="tweet"></textarea>
+							<label for="tweet">Twittea algo...</label>
+						</div>
+					</div>
+					&nbsp;&nbsp;&nbsp;
+					<center>
+					<input class="waves-effect waves-light btn" type="submit" value="Twittear" >
+					<!--
+					<a class="waves-effect waves-light btn" href="http://127.0.0.1:8000/admin/twitter/tweet/add/"><i class="material-icons right">message</i>Twittear</a></center>
+					&nbsp;&nbsp;&nbsp;-->
+					</form>
+				</div>
+
+			</div>
+			</div>
+		</div>
+	</div>
+<br><br>
+        {% for tweet in todos_los_tweets %}
+        <div class="container">
+	        <div class="col s12 div"> 
+	          <div class="card light-blue lighten-2 z-depth-5" >
+	            <div class="card-content black-text">
+	              <center><span class="card-title">{{tweet.user|title}}</span></center>
+	              <div class="card-action light-blue lighten-3 z-depth-2">
+	              <p>{{tweet.message}}</p>
+	              <br>
+	              <span>{{tweet.datetime|date:"d/M/Y"}}</span>
+	              </div>
+
+	              <div><a class="btn-floating halfway-fab waves-effect waves-light red" href="#"><i class="material-icons black cyan-text">thumb_up</i></a>
+
+	              </div>
+	              <!--<div><a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons black cyan-text">repeat</i></a></div>!-->
+	 
+	            </div>
+	          </div>
+        </div>
+          </div>	
+      {% endfor %}
+            
+        
+    </div>
+</body>
+
+</html>
